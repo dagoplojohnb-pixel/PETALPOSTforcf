@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Petalpost</title>
+<style>
+:root{--g:#2f6b4f;--gd:#1f4d36;--c:#fbf6ec;--a:#e8685a;--ad:#bf4437;--ink:#26332c;--mut:#6f7d74;--line:#e6dcc8}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--c);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif}
+.hidden{display:none!important}
+button{font:inherit;cursor:pointer;border:0}
+.btn{display:block;width:100%;padding:15px 20px;border-radius:16px;font-weight:700;font-size:17px;background:var(--a);color:#fff;box-shadow:0 5px 0 var(--ad);transition:.1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ad)}
+.btn.alt{background:#fff;color:var(--g);box-shadow:0 5px 0 var(--line);border:2px solid var(--line)}
+.btn.sm{display:inline-block;width:auto;padding:10px 16px;font-size:15px;border-radius:12px;box-shadow:0 3px 0 var(--ad)}
+.pill{display:inline-block;padding:7px 14px;border-radius:99px;background:#e5f0e6;color:var(--gd);font-size:13px;font-weight:600}
+/* HOME */
+#home{min-height:100vh;padding:22px 20px 60px;position:relative;overflow:hidden;background:radial-gradient(circle at 80% 0,#f8e1d6 0,transparent 45%),radial-gradient(circle at 0 60%,#dcecd9 0,transparent 45%),var(--c)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.logo{font-family:Georgia,serif;font-weight:700;font-size:24px;color:var(--g)}
+.float{position:absolute;font-size:34px;animation:fl 6s ease-in-out infinite;opacity:.9}
+@keyframes fl{50%{transform:translateY(-14px) rotate(8deg)}}
+.hero{text-align:center;padding-top:30px;position:relative}
+.hero h1{font-size:44px;line-height:1.05;margin:18px 0 14px;color:var(--gd)}
+.hero h1 em{color:var(--a)}
+.hero p{color:var(--mut);font-size:17px;line-height:1.55;margin:0 auto 26px;max-width:340px}
+.hero .btn{max-width:320px;margin:0 auto 16px}
+.stats{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.gal .mini{border-radius:16px;overflow:hidden;border:2px solid var(--line);aspect-ratio:4/5;position:relative}
+/* APP */
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.ic{width:40px;height:40px;border-radius:12px;background:var(--c);font-size:18px;border:1px solid var(--line)}
+.ic:disabled{opacity:.35}
+.top .sp{flex:1;font-size:13px;color:var(--mut);text-align:center}
+.stage{flex:1;min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;background:#efe8d8}
+.cv{position:relative;height:100%;max-width:100%;aspect-ratio:4/5;border-radius:22px;overflow:hidden;box-shadow:0 8px 24px #0002;touch-action:none}
+.wb,.wf{position:absolute;left:20%;width:60%;bottom:0;height:52%;clip-path:polygon(0 0,100% 0,64% 100%,36% 100%)}
+.wf{left:24%;width:52%;height:34%;z-index:1000;pointer-events:none;filter:brightness(.93);clip-path:polygon(0 0,100% 0,66% 100%,34% 100%)}
+.wb{z-index:0}
+.rib{position:absolute;left:50%;bottom:26%;transform:translateX(-50%);font-size:calc(var(--u)*13);z-index:1001;pointer-events:none;line-height:1}
+.it{position:absolute;line-height:1;font-size:calc(var(--u)*var(--s));touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.it.sel{outline:2px dashed var(--a);outline-offset:4px;border-radius:10px}
+.tools{display:flex;gap:8px;justify-content:center;padding:8px;background:#fff;border-top:1px solid var(--line)}
+.tools .ic{width:46px}
+.tabs{display:flex;gap:8px;padding:10px 12px 4px;background:#fff;overflow-x:auto}
+.tab{flex:none;padding:8px 16px;border-radius:99px;background:var(--c);border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
+.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
+.pal{display:flex;gap:10px;padding:8px 12px 14px;background:#fff;overflow-x:auto;min-height:84px}
+.pi{flex:none;width:62px;height:62px;border-radius:16px;background:var(--c);border:2px solid var(--line);font-size:32px;display:flex;align-items:center;justify-content:center}
+.pi.on{border-color:var(--a)}
+.pi .sw{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #0002}
+/* MODAL */
+.ov{position:fixed;inset:0;background:#1f2a24aa;display:flex;align-items:flex-end;justify-content:center;z-index:5000;padding:0}
+.sheet{background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:22px 20px 26px}
+.sheet h2{margin:0 0 4px;color:var(--g);font-size:26px}
+.steps{display:flex;gap:6px;margin:14px 0 18px}
+.steps i{flex:1;height:6px;border-radius:9px;background:var(--line)}
+.steps i.on{background:var(--a)}
+label{display:block;font-weight:700;margin:14px 0 6px;font-size:15px}
+input,textarea{width:100%;font:inherit;padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:#fffdf8;color:var(--ink)}
+textarea{min-height:140px;resize:vertical;font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive}
+input:focus,textarea:focus{outline:0;border-color:var(--a)}
+.cnt{text-align:right;color:var(--mut);font-size:13px;margin-top:4px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{padding:14px;border-radius:16px;border:2px solid var(--line);background:#fff;text-align:left;font-weight:700;color:var(--ink)}
+.opt small{display:block;color:var(--mut);font-weight:500;margin-top:3px}
+.opt.on{border-color:var(--a);background:#fff4f1}
+.row{display:flex;gap:10px;margin-top:20px}
+.row .btn{flex:1}
+.x{float:right;width:38px;height:38px;border-radius:50%;background:var(--c);font-size:18px}
+.sum{background:var(--c);border-radius:16px;padding:14px;font-size:15px;line-height:1.7}
+.link{word-break:break-all;font-size:12px;background:var(--c);border:2px dashed var(--line);padding:10px;border-radius:12px;max-height:80px;overflow:auto;margin:12px 0}
+/* VIEW */
+#view{min-height:100vh;padding:20px;text-align:center;background:radial-gradient(circle at 50% 0,#f8e1d6 0,transparent 55%),var(--c)}
+#view .cv{height:auto;width:100%;max-width:380px;margin:14px auto;aspect-ratio:4/5}
+.lockbox{max-width:360px;margin:60px auto;background:#fff;border-radius:24px;padding:26px;border:2px solid var(--line)}
+.card{border-radius:20px;padding:26px 22px;text-align:left;box-shadow:0 10px 30px #0003;margin:10px 0}
+.card .hd{font-family:Georgia,serif;font-size:22px;margin-bottom:12px}
+.card .tx{font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;font-size:19px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.card .fr{margin-top:16px;text-align:right;font-style:italic}
+.paper{background:#fffdf7;color:#3b3b3b}.love{background:#ffe3e8;color:#8a1c3a}.night{background:#1f2a44;color:#f3e9c6}.garden{background:#e5f3e8;color:#1f4d36}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <span class="float" style="left:6%;top:18%">🌷</span>
+  <span class="float" style="right:8%;top:14%;animation-delay:1s">🦋</span>
+  <span class="float" style="left:10%;top:62%;animation-delay:2s">🌼</span>
+  <span class="float" style="right:6%;top:58%;animation-delay:3s">🌿</span>
+  <div class="nav"><div class="logo">🌸 Petalpost</div><span class="pill">Free forever</span></div>
+  <div class="hero">
+    <span class="pill">No account needed</span>
+    <h1>Say it with <em>flowers.</em><br>Send it in seconds.</h1>
+    <p>Arrange a pretty digital bouquet, tuck in a heartfelt note, and share it with a single link.</p>
+    <button class="btn" onclick="openApp()">Make a bouquet →</button>
+    <button class="btn alt" onclick="document.getElementById('galwrap').scrollIntoView({behavior:'smooth'})">Browse ideas</button>
+    <div class="stats"><span class="pill">💌 Private notes</span><span class="pill">⏰ Timed reveal</span><span class="pill">🎶 Music</span></div>
+  </div>
+  <div id="galwrap" style="margin-top:50px;position:relative">
+    <h3 style="margin:0;color:var(--gd);font-size:22px">Start from an idea</h3>
+    <div class="gal" id="gal"></div>
+  </div>
+</div>
+
+<!-- BUILDER -->
+<div id="app" class="hidden">
+  <div class="top">
+    <button class="ic" onclick="goHome()" title="Home">🏠</button>
+    <button class="ic" id="undo" onclick="undo()" title="Undo">↩️</button>
+    <button class="ic" onclick="clearAll()" title="Clear">🧹</button>
+    <div class="sp" id="hint">Tap an item below to add</div>
+    <button class="btn sm" onclick="openWizard()">Send 💌</button>
+  </div>
+  <div class="stage"><div class="cv" id="cv"></div></div>
+  <div class="tools hidden" id="tools">
+    <button class="ic" onclick="scale(-2)">➖</button>
+    <button class="ic" onclick="scale(2)">➕</button>
+    <button class="ic" onclick="rot(-15)">⟲</button>
+    <button class="ic" onclick="rot(15)">⟳</button>
+    <button class="ic" onclick="front()">⬆️</button>
+    <button class="ic" onclick="del()">🗑️</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="pal" id="pal"></div>
+</div>
+
+<!-- VIEW -->
+<div id="view" class="hidden"></div>
+
+<!-- WIZARD -->
+<div class="ov hidden" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script>
+const FL=['🌹','🌷','🌻','🌸','🌺','🪻','🌼','💐','🪷','🏵️','🥀','🌾'];
+const FI=['🌿','🍃','🍀','🌱','🪴','🦋','✨','🍓','🍒','🐝','⭐','🕊️'];
+const WR=[{n:'Blush',c:'#f7b6c2'},{n:'Cream',c:'#f5e6c8'},{n:'Mint',c:'#a8dcc0'},{n:'Lilac',c:'#c9b6ea'},{n:'Kraft',c:'#c9a37a'},{n:'Sky',c:'#a9d3f0'}];
+const BG=['#fff3ee','#e8f3e6','#efe7f8','#fff8d9','#dff1f5','#ffe0e6','#2b3a33'];
+const PRE=[
+ [{e:'🌻',x:35,y:34,s:22,r:-8},{e:'🌻',x:65,y:34,s:22,r:8},{e:'🌼',x:50,y:24,s:17,r:0},{e:'🌿',x:24,y:48,s:14,r:-40},{e:'🌿',x:76,y:48,s:14,r:40},{e:'🌼',x:50,y:44,s:15,r:0}],
+ [{e:'🌹',x:36,y:32,s:21,r:-10},{e:'🌹',x:64,y:32,s:21,r:10},{e:'🌹',x:50,y:22,s:21,r:0},{e:'🍃',x:25,y:46,s:14,r:-50},{e:'🍃',x:75,y:46,s:14,r:50},{e:'✨',x:50,y:42,s:12,r:0}],
+ [{e:'🌷',x:34,y:32,s:20,r:-12},{e:'🌸',x:66,y:32,s:20,r:12},{e:'🪻',x:50,y:22,s:20,r:0},{e:'🦋',x:78,y:20,s:12,r:20},{e:'🌿',x:50,y:44,s:15,r:0}]
+];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={w:0,bg:0,items:[]},sel=null,hist=[],tab='Flowers',W={msg:'',to:'',from:'',card:'paper',music:'none',pass:'',date:''},step=0,uid=1;
+
+/* ---------- rendering ---------- */
+function draw(el,st,edit){
+  el.style.background=BG[st.bg];
+  el.style.setProperty('--u',(el.clientWidth/100)+'px');
+  const w=WR[st.w].c;
+  el.innerHTML=`<div class="wb" style="background:${w}"></div>`+
+    st.items.map((it,i)=>`<div class="it ${edit&&it.id===sel?'sel':''}" data-id="${it.id}" style="--s:${it.s};left:${it.x}%;top:${it.y}%;transform:translate(-50%,-50%) rotate(${it.r}deg);z-index:${i+1}">${it.e}</div>`).join('')+
+    `<div class="wf" style="background:${w}"></div><div class="rib">🎀</div>`;
+  if(edit)el.querySelectorAll('.it').forEach(n=>n.addEventListener('pointerdown',e=>dragStart(e,n)));
+}
+function redraw(){draw($('cv'),S,true);$('tools').classList.toggle('hidden',sel==null);$('hint').textContent=sel==null?'Tap an item below to add':'Drag to move';$('undo').disabled=!hist.length}
+function snap(){hist.push(JSON.stringify(S));if(hist.length>40)hist.shift()}
+function undo(){if(!hist.length)return;S=JSON.parse(hist.pop());sel=null;redraw()}
+function clearAll(){if(S.items.length&&confirm('Clear all flowers?')){snap();S.items=[];sel=null;redraw()}}
+const cur=()=>S.items.find(i=>i.id===sel);
+function scale(d){const it=cur();if(!it)return;snap();it.s=Math.max(6,Math.min(50,it.s+d));redraw()}
+function rot(d){const it=cur();if(!it)return;snap();it.r+=d;redraw()}
+function front(){const i=S.items.findIndex(x=>x.id===sel);if(i<0)return;snap();S.items.push(S.items.splice(i,1)[0]);redraw()}
+function del(){snap();S.items=S.items.filter(i=>i.id!==sel);sel=null;redraw()}
+function addItem(e){snap();const it={id:uid++,e,x:50+(Math.random()*30-15),y:30+(Math.random()*16-8),s:18,r:Math.round(Math.random()*40-20)};S.items.push(it);sel=it.id;redraw()}
+function dragStart(ev,n){
+  ev.preventDefault();const id=+n.dataset.id;sel=id;const it=cur();snap();
+  document.querySelectorAll('.it').forEach(x=>x.classList.toggle('sel',x===n));
+  $('tools').classList.remove('hidden');
+  const cv=$('cv'),mv=e=>{const r=cv.getBoundingClientRect();it.x=Math.max(2,Math.min(98,(e.clientX-r.left)/r.width*100));it.y=Math.max(2,Math.min(98,(e.clientY-r.top)/r.height*100));n.style.left=it.x+'%';n.style.top=it.y+'%'};
+  const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);redraw()};
+  window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);
+}
+cvTap=null;
+document.addEventListener('pointerdown',e=>{if(e.target.id==='cv'){sel=null;redraw()}});
+
+/* ---------- palette ---------- */
+function renderTabs(){
+  $('tabs').innerHTML=['Flowers','Fillers','Wrappers','Backdrop'].map(t=>`<button class="tab ${t===tab?'on':''}" onclick="tab='${t}';renderTabs()">${t}</button>`).join('');
+  let h='';
+  if(tab==='Flowers')h=FL.map(e=>`<button class="pi" onclick="addItem('${e}')">${e}</button>`).join('');
+  if(tab==='Fillers')h=FI.map(e=>`<button class="pi" onclick="addItem('${e}')">${e}</button>`).join('');
+  if(tab==='Wrappers')h=WR.map((w,i)=>`<button class="pi ${S.w===i?'on':''}" onclick="snap();S.w=${i};renderTabs();redraw()"><span class="sw" style="background:${w.c}"></span></button>`).join('');
+  if(tab==='Backdrop')h=BG.map((b,i)=>`<button class="pi ${S.bg===i?'on':''}" onclick="snap();S.bg=${i};renderTabs();redraw()"><span class="sw" style="background:${b}"></span></button>`).join('');
+  $('pal').innerHTML=h;
+}
+
+/* ---------- navigation ---------- */
+function openApp(p){$('home').classList.add('hidden');$('view').classList.add('hidden');$('app').classList.remove('hidden');
+  if(p!=null){S={w:p%WR.length,bg:p,items:PRE[p].map(i=>({...i,id:uid++}))};hist=[];sel=null}
+  renderTabs();setTimeout(redraw,30)}
+function goHome(){$('app').classList.add('hidden');$('view').classList.add('hidden');$('home').classList.remove('hidden')}
+function buildGallery(){
+  $('gal').innerHTML=PRE.map((_,i)=>`<div class="mini" onclick="openApp(${i})" id="g${i}"></div>`).join('');
+  PRE.forEach((p,i)=>draw($('g'+i),{w:i,bg:i,items:p.map(x=>({...x,id:i*100+Math.random()}))},false));
+}
+
+/* ---------- wizard ---------- */
+const STEPS=['Message','Recipient','Card','Music','Lock','Review'];
+function openWizard(){if(!S.items.length){alert('Add some flowers first 🌸');return}step=0;$('ov').classList.remove('hidden');wiz()}
+function closeWiz(){$('ov').classList.add('hidden');stopMusic()}
+function wiz(){
+  let b='';
+  if(step==0)b=`<label>Your message</label><textarea id="f_msg" maxlength="500" placeholder="Write something from the heart…" oninput="W.msg=this.value;$('c').textContent=this.value.length+'/500'">${esc(W.msg)}</textarea><div class="cnt" id="c">${W.msg.length}/500</div>`;
+  if(step==1)b=`<label>Dearest…</label><input id="f_to" value="${esc(W.to)}" placeholder="Friend" oninput="W.to=this.value"><label>From (optional)</label><input value="${esc(W.from)}" placeholder="A secret admirer" oninput="W.from=this.value">`;
+  if(step==2)b=`<label>Choose a card style</label><div class="opts">${[['paper','📜 Paper','Classic cream'],['love','💗 Love letter','Soft rose'],['night','🌙 Midnight','Deep & cosy'],['garden','🌿 Garden','Fresh green']].map(o=>`<button class="opt ${W.card==o[0]?'on':''}" onclick="W.card='${o[0]}';wiz()">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>`;
+  if(step==3)b=`<label>Background music</label><div class="opts">${[['none','🔇 None','Silent'],['chime','🔔 Chimes','Sparkly & light'],['lull','🎹 Lullaby','Slow & sweet']].map(o=>`<button class="opt ${W.music==o[0]?'on':''}" onclick="W.music='${o[0]}';playMusic('${o[0]}');wiz()">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>`;
+  if(step==4)b=`<label>Passcode (optional)</label><input value="${esc(W.pass)}" placeholder="e.g. 1234" oninput="W.pass=this.value"><label>Reveal on (optional)</label><input type="datetime-local" value="${esc(W.date)}" onchange="W.date=this.value"><p style="color:var(--mut);font-size:13px">Locks are a fun surprise feature, not real security.</p>`;
+  if(step==5)b=`<div class="sum">💐 ${S.items.length} items<br>💌 To: <b>${esc(W.to||'Friend')}</b> — from <b>${esc(W.from||'A Secret Admirer')}</b><br>🎨 Card: ${W.card} · 🎶 ${W.music}<br>🔒 ${W.pass?'Passcode on':'No passcode'} · ⏰ ${W.date?new Date(W.date).toLocaleString():'Opens right away'}</div><div id="out"></div>`;
+  $('sheet').innerHTML=`<button class="x" onclick="closeWiz()">✕</button><h2>Wrap your bouquet</h2><div class="steps">${STEPS.map((s,i)=>`<i class="${i<=step?'on':''}"></i>`).join('')}</div><div style="color:var(--mut);font-size:13px;font-weight:700">STEP ${step+1} · ${STEPS[step].toUpperCase()}</div>${b}
+  <div class="row">${step>0?'<button class="btn alt" onclick="step--;wiz()">Back</button>':''}${step<5?'<button class="btn" onclick="next()">Next</button>':'<button class="btn" onclick="makeLink()">Create link 🔗</button>'}</div>`;
+}
+function next(){if(step==0&&!W.msg.trim()){alert('Write a little note first 💌');return}stopMusic();step++;wiz()}
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))))}
+function dec(s){return JSON.parse(decodeURIComponent(escape(atob(s))))}
+function payload(){return enc({s:{w:S.w,bg:S.bg,items:S.items.map(i=>({e:i.e,x:+i.x.toFixed(1),y:+i.y.toFixed(1),s:i.s,r:i.r}))},m:W.msg,t:W.to||'Friend',f:W.from||'A Secret Admirer',c:W.card,mu:W.music,p:W.pass,d:W.date})}
+function makeLink(){
+  const link=location.href.split('#')[0]+'#v='+payload();window._link=link;
+  $('out').innerHTML=`<div class="link">${link}</div><div class="row" style="margin-top:0"><button class="btn sm" style="flex:1" onclick="copyLink()">Copy 📋</button><button class="btn sm" style="flex:1" onclick="shareLink()">Share ↗</button></div><button class="btn alt" style="margin-top:14px" onclick="closeWiz();showView('${payload()}')">Preview it 👀</button>`;
+}
+function copyLink(){const t=window._link;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Link copied!')).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');alert('Link copied!')}catch(e){alert('Long-press the link to copy it')}a.remove()})}
+function shareLink(){if(navigator.share)navigator.share({title:'A bouquet for you 💐',url:window._link}).catch(()=>{});else copyLink()}
+
+/* ---------- viewer ---------- */
+function showView(p){
+  let d;try{d=dec(p)}catch(e){return}
+  $('home').classList.add('hidden');$('app').classList.add('hidden');$('view').classList.remove('hidden');
+  const go=()=>{
+    $('view').innerHTML=`<h1 class="serif" style="color:var(--gd);margin:6px 0">A bouquet for ${esc(d.t)} 💐</h1><div class="cv" id="vcv"></div>
+    <button class="btn" style="max-width:340px;margin:0 auto 14px" onclick="openNote()">Open the note 💌</button>
+    ${d.mu!=='none'?'<button class="btn alt" style="max-width:340px;margin:0 auto 14px" onclick="playMusic(\''+d.mu+'\')">🎶 Play music</button>':''}
+    <button class="btn alt" style="max-width:340px;margin:0 auto" onclick="location.hash='';goHome()">Make your own 🌸</button>`;
+    draw($('vcv'),d.s,false);window._d=d;
+  };
+  const lock=()=>{
+    if(d.d&&new Date(d.d)>new Date()){
+      $('view').innerHTML=`<div class="lockbox"><div style="font-size:50px">⏰</div><h2 class="serif">Not yet…</h2><p>This bouquet for <b>${esc(d.t)}</b> opens on<br><b>${new Date(d.d).toLocaleString()}</b></p><div id="cd" style="font-size:22px;font-weight:700;color:var(--a)"></div></div>`;
+      const t=setInterval(()=>{const ms=new Date(d.d)-new Date();if(ms<=0){clearInterval(t);lock();return}const s=Math.floor(ms/1000);if($('cd'))$('cd').textContent=`${Math.floor(s/86400)}d ${Math.floor(s%86400/3600)}h ${Math.floor(s%3600/60)}m ${s%60}s`},1000);return}
+    if(d.p&&!window._ok){
+      $('view').innerHTML=`<div class="lockbox"><div style="font-size:50px">🔒</div><h2 class="serif">Enter the passcode</h2><input id="pw" placeholder="Passcode" style="margin:10px 0 16px"><button class="btn" onclick="if($('pw').value===window._d.p){window._ok=1;showView('${p}')}else alert('Not quite — try again')">Unlock</button></div>`;window._d=d;return}
+    go();
+  };
+  window._d=d;lock();
+}
+function openNote(){
+  const d=window._d;$('ov').classList.remove('hidden');
+  $('sheet').innerHTML=`<button class="x" onclick="$('ov').classList.add('hidden')">✕</button><div class="card ${d.c}"><div class="hd">Dearest ${esc(d.t)},</div><div class="tx">${esc(d.m)}</div><div class="fr">— ${esc(d.f)}</div></div>`;
+}
+
+/* ---------- music ---------- */
+let AC,tmr;
+function stopMusic(){clearInterval(tmr);tmr=null}
+function tone(f,t,dur,vol){const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur)}
+function playMusic(k){
+  stopMusic();if(k==='none')return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){return}
+  const P=[523,587,659,784,880,1047],L=[392,440,523,440,392,330,392,294];let i=0;
+  const play=()=>{const t=AC.currentTime;if(k==='chime')tone(P[Math.floor(Math.random()*P.length)],t,1.6,.15);else{tone(L[i%L.length],t,1.4,.18);i++}};
+  play();tmr=setInterval(play,k==='chime'?700:900);
+}
+
+/* ---------- init ---------- */
+window.addEventListener('resize',()=>{if(!$('app').classList.contains('hidden'))redraw()});
+function route(){const m=location.hash.match(/#v=(.+)/);if(m)showView(m[1])}
+window.addEventListener('hashchange',route);
+buildGallery();renderTabs();route();
+</script>
+</body>
+</html>
